@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Until I see you again</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,500&family=Karla:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sky-top: #f7d9cf;
+    --sky-mid: #f3c1c6;
+    --sky-low: #c9c3e6;
+    --ink: #2e2a52;
+    --ink-soft: #5d5886;
+    --glow: #e8607a;
+    --gold: #c98a2b;
+    --star: rgba(255,255,255,0);
+    --panel: rgba(255,255,255,0.45);
+    --line: rgba(46,42,82,0.25);
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --sky-top: #14163a;
+      --sky-mid: #2a2459;
+      --sky-low: #5b3a6e;
+      --ink: #fbeee6;
+      --ink-soft: #b8b1dc;
+      --glow: #ff8fa6;
+      --gold: #f6d58e;
+      --star: rgba(255,255,255,0.9);
+      --panel: rgba(20,22,58,0.5);
+      --line: rgba(251,238,230,0.25);
+    }
+  }
+  :root[data-theme="dark"] {
+    --sky-top: #14163a;
+    --sky-mid: #2a2459;
+    --sky-low: #5b3a6e;
+    --ink: #fbeee6;
+    --ink-soft: #b8b1dc;
+    --glow: #ff8fa6;
+    --gold: #f6d58e;
+    --star: rgba(255,255,255,0.9);
+    --panel: rgba(20,22,58,0.5);
+    --line: rgba(251,238,230,0.25);
+  }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); min-height: 100%; }
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--sky-mid);
+    color: var(--ink);
+    font-family: "Karla", "Helvetica Neue", Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: ""; position: fixed; inset: 0; z-index: -1;
+    background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 55%, var(--sky-low) 100%);
+  }
+  #stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+  .star {
+    position: absolute; width: 2px; height: 2px; border-radius: 50%;
+    background: var(--star);
+    animation: twinkle 4s ease-in-out infinite;
+  }
+  @keyframes twinkle { 50% { opacity: 0.2; } }
+
+  main {
+    position: relative; z-index: 1;
+    width: min(100%, 980px);
+    padding: clamp(2.5rem, 8vh, 6rem) 1.25rem 2rem;
+    text-align: center;
+    flex: 1;
+  }
+  .lead {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-style: italic;
+    font-size: clamp(1.4rem, 3.4vw, 2.1rem);
+    color: var(--ink-soft);
+    margin: 0 0 0.3rem;
+  }
+  h1 {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 400;
+    font-size: clamp(2.6rem, 8vw, 5.2rem);
+    line-height: 1;
+    margin: 0 0 clamp(2rem, 6vh, 3.5rem);
+    letter-spacing: -0.01em;
+  }
+
+  /* The countdown */
+  .clock {
+    display: flex; justify-content: center; align-items: flex-end;
+    flex-wrap: wrap; gap: clamp(0.6rem, 3vw, 2.4rem);
+  }
+  .unit { display: flex; flex-direction: column; align-items: center; min-width: 3.2ch; }
+  .num {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums lining-nums;
+    line-height: 0.9;
+    font-size: clamp(3.2rem, 11vw, 7.5rem);
+  }
+  .unit.big .num { font-size: clamp(4.4rem, 16vw, 11rem); }
+  .unit.small .num { font-size: clamp(2.2rem, 6vw, 4rem); color: var(--ink-soft); }
+  .lbl { font-size: 0.95rem; color: var(--ink-soft); margin-top: 0.4rem; display: flex; flex-direction: column; align-items: center; }
+  .lbl .aside { font-size: 0.75rem; font-style: italic; opacity: 0.8; white-space: nowrap; }
+  .sep {
+    font-family: "Cormorant Garamond", Georgia, serif; font-style: italic;
+    font-size: clamp(1.1rem, 2.6vw, 1.6rem); color: var(--ink-soft);
+    padding-bottom: 2.2rem;
+  }
+
+  /* The distance between us */
+  .distance { margin: clamp(3rem, 9vh, 5rem) auto 0; max-width: 720px; }
+  .track { position: relative; height: 90px; }
+  .track::before {
+    content: ""; position: absolute; left: 0; right: 0; top: 50%;
+    border-top: 1px dashed var(--line);
+  }
+  .fill {
+    position: absolute; top: 50%; height: 2px; margin-top: -1px;
+    background: var(--glow); opacity: 0.7;
+  }
+  .fill.l { left: 0; } .fill.r { right: 0; }
+  .who {
+    position: absolute; top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex; flex-direction: column; align-items: center;
+    transition: left 1.2s cubic-bezier(.2,.8,.2,1);
+  }
+  .dot {
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--glow);
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--glow) 25%, transparent), 0 0 24px var(--glow);
+  }
+  .who .name {
+    position: absolute; top: 28px; white-space: nowrap;
+    font-family: "Cormorant Garamond", Georgia, serif; font-style: italic; font-size: 1.25rem;
+  }
+  .meet-heart {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    width: 22px; height: 22px; color: var(--gold); opacity: 0.55;
+  }
+  .progress-text { color: var(--ink-soft); margin: 1.6rem 0 0; font-size: 1rem; }
+  .progress-text strong { color: var(--ink); font-weight: 500; }
+
+  .note {
+    font-family: "Cormorant Garamond", Georgia, serif; font-style: italic;
+    font-size: clamp(1.2rem, 2.8vw, 1.5rem);
+    max-width: 34ch; margin: clamp(2.5rem, 7vh, 4rem) auto 0; line-height: 1.45;
+  }
+
+  /* Speech bubbles when you tap a dot */
+  .who { background: none; border: 0; padding: 0; cursor: pointer; color: inherit; }
+  .bubble {
+    position: absolute; bottom: 30px; width: max-content; max-width: min(260px, 62vw); text-align: left;
+    background: var(--panel); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--line); border-radius: 14px 14px 14px 4px;
+    padding: 0.4rem 0.75rem; font-size: 0.9rem;
+    opacity: 0; transform: translateY(6px); transition: opacity .25s, transform .25s;
+    pointer-events: none;
+  }
+  #me .bubble { left: -4px; }
+  #you .bubble { right: -4px; border-radius: 14px 14px 4px 14px; text-align: right; }
+  .bubble.show { opacity: 1; transform: none; }
+  .hint { font-size: 0.85rem; color: var(--ink-soft); margin: 0.6rem 0 0; opacity: 0.8; }
+
+  /* Rotating jokes */
+  .quip {
+    font-family: "Cormorant Garamond", Georgia, serif; font-style: italic;
+    font-size: clamp(1.25rem, 3vw, 1.6rem);
+    max-width: 36ch; margin: clamp(2.5rem, 7vh, 4rem) auto 0; line-height: 1.4;
+    min-height: 4.6em; transition: opacity .4s;
+  }
+  .quip.fade { opacity: 0; }
+  .quip-btn {
+    font: inherit; font-size: 0.9rem; color: var(--ink-soft); background: none;
+    border: 0; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; padding: 0.3rem;
+  }
+
+  /* Meanwhile, the boring statistics */
+  .stats { margin: clamp(2.5rem, 7vh, 4rem) auto 0; max-width: 640px; text-align: left; }
+  .stats h2 {
+    font-family: "Cormorant Garamond", Georgia, serif; font-weight: 600;
+    font-size: clamp(1.5rem, 3.6vw, 2rem); margin: 0 0 0.8rem; text-align: center;
+  }
+  .stats ul { list-style: none; margin: 0; padding: 0; }
+  .stats li {
+    display: grid; grid-template-columns: 8.5rem 1fr; gap: 1rem; align-items: baseline;
+    padding: 0.7rem 0; border-top: 1px dashed var(--line); line-height: 1.45;
+  }
+  .stats li:last-child { border-bottom: 1px dashed var(--line); }
+  .stats b {
+    font-family: "Cormorant Garamond", Georgia, serif; font-weight: 600; font-size: 1.6rem;
+    text-align: right; font-variant-numeric: tabular-nums; color: var(--glow);
+  }
+
+  /* Settings */
+  footer { position: relative; z-index: 1; padding: 1rem 1.25rem 2rem; text-align: center; width: 100%; }
+  .edit-btn {
+    font: inherit; font-size: 0.95rem; color: var(--ink-soft);
+    background: none; border: 1px solid var(--line); border-radius: 999px;
+    padding: 0.5rem 1.1rem; cursor: pointer;
+  }
+  .edit-btn:hover { color: var(--ink); border-color: var(--ink-soft); }
+  button:focus-visible, input:focus-visible, textarea:focus-visible {
+    outline: 2px solid var(--glow); outline-offset: 3px;
+  }
+  .settings {
+    display: none; margin: 1.2rem auto 0; max-width: 420px; text-align: left;
+    background: var(--panel); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--line); border-radius: 18px; padding: 1.3rem;
+  }
+  .settings.open { display: grid; gap: 0.9rem; }
+  .settings label { display: grid; gap: 0.3rem; font-size: 0.9rem; color: var(--ink-soft); }
+  .settings .row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+  .settings input, .settings textarea {
+    font: inherit; font-size: 1rem; color: var(--ink);
+    background: transparent; border: 1px solid var(--line); border-radius: 10px;
+    padding: 0.55rem 0.7rem; width: 100%;
+  }
+  .settings textarea { resize: vertical; min-height: 4rem; }
+  .save {
+    font: inherit; font-weight: 500; border: 0; border-radius: 999px;
+    padding: 0.65rem 1.2rem; background: var(--ink); color: var(--sky-top); cursor: pointer;
+  }
+
+  /* Arrival */
+  .arrived h1 { margin-bottom: 1rem; }
+  .arrived .clock { display: none; }
+
+  @media (max-width: 760px) {
+    .stats li { grid-template-columns: 6.5rem 1fr; }
+  }
+  @media (max-width: 560px) {
+    main { padding-left: 1rem; padding-right: 1rem; }
+    .sep { display: none; }
+    /* months + days on top, hours / minutes / seconds underneath */
+    .clock {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.4rem 0.5rem; align-items: end; max-width: 380px; margin: 0 auto;
+    }
+    .unit.big { grid-column: 2 / 4; }
+    .unit .num { font-size: clamp(3rem, 15vw, 4rem); }
+    .unit.big .num { font-size: clamp(4.6rem, 26vw, 6.5rem); }
+    .unit.small .num { font-size: clamp(2.2rem, 11vw, 2.8rem); }
+    .track { height: 110px; }
+    .who .name { font-size: 1.1rem; }
+    .progress-text { font-size: 0.95rem; line-height: 1.6; }
+    .stats li { grid-template-columns: 1fr; gap: 0.1rem; }
+    .stats b { text-align: left; }
+    .settings .row { grid-template-columns: 1fr; }
+    .settings { padding: 1rem; }
+  }
+  @media (max-width: 340px) {
+    .lbl .aside { white-space: normal; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .star { animation: none; }
+    .who { transition: none; }
+  }
+</style>
+</head>
+<body>
+<div id="stars" aria-hidden="true"></div>
+
+<main id="main">
+  <p class="lead" id="lead">Until I hold you again</p>
+  <h1 id="title">July 2027</h1>
+
+  <div class="clock" role="timer" aria-live="off">
+    <div class="unit"><span class="num" id="months">0</span><span class="lbl" id="l-months">months</span></div>
+    <span class="sep" aria-hidden="true">&amp;</span>
+    <div class="unit big"><span class="num" id="days">0</span><span class="lbl" id="l-days">days</span></div>
+    <div class="unit small"><span class="num" id="hours">00</span><span class="lbl">hours</span></div>
+    <div class="unit small"><span class="num" id="minutes">00</span><span class="lbl">minutes</span></div>
+    <div class="unit small"><span class="num" id="seconds">00</span><span class="lbl">seconds<span class="aside">yes, I'm counting</span></span></div>
+  </div>
+
+  <section class="distance" aria-label="How close we are">
+    <div class="track">
+      <div class="fill l" id="fillL"></div>
+      <div class="fill r" id="fillR"></div>
+      <svg class="meet-heart" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 4.4 2.6.2.3.6.3.8 0 .8-1.4 2.3-2.6 4.4-2.6 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg>
+      <button class="who" id="me" aria-label="Poke Enzoka"><span class="bubble" id="bubbleA"></span><span class="dot"></span><span class="name" id="nameA">Enzoka</span></button>
+      <button class="who" id="you" aria-label="Poke Musako"><span class="bubble" id="bubbleB"></span><span class="dot"></span><span class="name" id="nameB">Musako</span></button>
+    </div>
+    <p class="progress-text" id="progress"></p>
+    <p class="hint">Tap the dots. They have opinions.</p>
+  </section>
+
+  <p class="quip" id="quip" aria-live="polite"></p>
+  <button class="quip-btn" id="nextQuip">Another one</button>
+
+  <section class="stats" aria-label="Fun facts about the wait">
+    <h2>Before we meet, I will probably…</h2>
+    <ul id="stats"></ul>
+  </section>
+
+  <p class="note" id="note">Every second on this page is one less second between us.</p>
+</main>
+
+<footer>
+  <button class="edit-btn" id="toggle" aria-expanded="false" aria-controls="settings">Edit date and names</button>
+  <div class="settings" id="settings">
+    <label>The day we meet
+      <input type="datetime-local" id="inDate">
+    </label>
+    <label>The day she left
+      <input type="datetime-local" id="inStart">
+    </label>
+    <div class="row">
+      <label>Your name <input type="text" id="inA" maxlength="24"></label>
+      <label>Her name <input type="text" id="inB" maxlength="24"></label>
+    </div>
+    <label>A little note
+      <textarea id="inNote" maxlength="160"></textarea>
+    </label>
+    <button class="save" id="save">Save</button>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // ===== Default settings — change the date here if you like =====
+  var DEFAULTS = {
+    target: "2027-07-01T00:00",
+    start: "2026-08-12T00:00",
+    nameA: "Enzoka",
+    nameB: "Musako",
+    note: "Every second on this page is one less second between us."
+  };
+
+  function load(key, fallback) {
+    try { var v = localStorage.getItem("cd_" + key); return v ? v : fallback; }
+    catch (e) { return fallback; }
+  }
+  function store(key, val) {
+    try { localStorage.setItem("cd_" + key, val); } catch (e) {}
+  }
+
+  // Replace the old placeholder names if they were ever saved
+  function fixName(v, old, fallback) { return v === old ? fallback : v; }
+
+  var state = {
+    target: load("target", DEFAULTS.target),
+    nameA: fixName(load("nameA", DEFAULTS.nameA), "Me", DEFAULTS.nameA),
+    nameB: fixName(load("nameB", DEFAULTS.nameB), "You", DEFAULTS.nameB),
+    note: load("note", DEFAULTS.note),
+    start: load("left", DEFAULTS.start)
+  };
+
+  var $ = function (id) { return document.getElementById(id); };
+  var monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+  function targetDate() { return new Date(state.target); }
+
+  function addMonths(d, n) {
+    var r = new Date(d.getTime());
+    var day = r.getDate();
+    r.setDate(1);
+    r.setMonth(r.getMonth() + n);
+    var last = new Date(r.getFullYear(), r.getMonth() + 1, 0).getDate();
+    r.setDate(Math.min(day, last));
+    return r;
+  }
+
+  function pad(n) { return String(n).padStart(2, "0"); }
+
+  function render() {
+    var t = targetDate();
+    $("title").textContent = t.getDate() + " " + monthNames[t.getMonth()] + " " + t.getFullYear();
+    $("nameA").textContent = state.nameA;
+    $("nameB").textContent = state.nameB;
+    $("note").textContent = state.note;
+    tick();
+  }
+
+  function tick() {
+    var now = new Date();
+    var t = targetDate();
+    var main = $("main");
+
+    if (now >= t) {
+      main.classList.add("arrived");
+      $("lead").textContent = "The wait is over";
+      $("title").textContent = "Today, " + state.nameA + " & " + state.nameB;
+      setProgress(1);
+      $("progress").innerHTML = "<strong>Together.</strong> Why are you still looking at this website? Go hug!";
+      return;
+    }
+    main.classList.remove("arrived");
+    $("lead").textContent = "Until I hold you again";
+
+    var months = 0;
+    while (addMonths(now, months + 1) <= t) months++;
+    var rest = t - addMonths(now, months);
+    var days = Math.floor(rest / 86400000); rest -= days * 86400000;
+    var hours = Math.floor(rest / 3600000); rest -= hours * 3600000;
+    var minutes = Math.floor(rest / 60000); rest -= minutes * 60000;
+    var seconds = Math.floor(rest / 1000);
+
+    $("months").textContent = months;
+    $("days").textContent = days;
+    $("hours").textContent = pad(hours);
+    $("minutes").textContent = pad(minutes);
+    $("seconds").textContent = pad(seconds);
+    $("l-months").textContent = months === 1 ? "month" : "months";
+    $("l-days").textContent = days === 1 ? "day" : "days";
+
+    var start = new Date(state.start);
+    var total = t - start;
+    var p = total > 0 ? Math.min(1, Math.max(0, (now - start) / total)) : 0;
+    setProgress(p);
+
+    var totalDays = Math.ceil((t - now) / 86400000);
+    var apart = Math.floor((now - start) / 86400000);
+    $("progress").innerHTML = "<strong>" + apart + "</strong> days survived since you left on " + start.getDate() + " " + monthNames[start.getMonth()] + ". <strong>" +
+      totalDays + "</strong> sleeps to go.<br>" + progressJoke(p) +
+      "<br>Gym glow-up loading: <strong>" + Math.round(p * 100) + "%</strong> " + glowJoke(p);
+    if (now.getSeconds() === 0 || !statsDone) { renderStats(t - now, totalDays); statsDone = true; }
+  }
+  var statsDone = false;
+
+  function progressJoke(p) {
+    var pct = "<strong>" + (p * 100).toFixed(1) + "%</strong>";
+    if (p < 0.005) return "Progress: basically zero. But emotionally? Huge.";
+    if (p < 0.10) return pct + " done. We've left the parking lot.";
+    if (p < 0.25) return pct + " done. Are we there yet? No.";
+    if (p < 0.50) return pct + " done. Still not there. Stop asking.";
+    if (p < 0.55) return pct + " done. Halfway! Somebody bring cake.";
+    if (p < 0.75) return pct + " done. Downhill from here (the good kind).";
+    if (p < 0.90) return pct + " done. Start practicing your airport hug.";
+    if (p < 0.98) return pct + " done. Pack your bag. Then unpack it. Then pack it again.";
+    return pct + " done. Brush your teeth. Seriously. Right now.";
+  }
+
+  function glowJoke(p) {
+    if (p < 0.2) return "(currently: strong in spirit)";
+    if (p < 0.4) return "(arms: noticeable if you squint)";
+    if (p < 0.6) return "(t-shirts getting a little tighter)";
+    if (p < 0.8) return "(strangers asking for gym tips)";
+    if (p < 0.98) return "(airport hug lift-off confirmed)";
+    return "(ready. so ready.)";
+  }
+
+  // ===== Jokes =====
+  var QUIPS = [
+    "Long distance relationship: when your phone becomes your favorite person-shaped object.",
+    "Current status: hugging my pillow and pretending it laughs at my jokes.",
+    "Scientists confirm: video calls do not transmit hugs. Yet. I've written a complaint.",
+    "I asked the calendar to go faster. It said no. Rude.",
+    "Our relationship is 90% \"can you hear me?\" and 10% \"you froze, say it again.\"",
+    "Distance means so little when someone means so much. It also means plane tickets. So many plane tickets.",
+    "I checked this page again. Nothing changed much. I'll check again in 4 minutes.",
+    "Warning: on arrival day, I may hug you for an amount of time airport security finds suspicious.",
+    "My time zone and your time zone are not friends. But we are.",
+    "Plan for the first day: hug. Food. Hug. Nap. Hug. More food.",
+    "Fun fact: refreshing this page does not make July come faster. I tested it. Many times.",
+    "Missing you is my cardio.",
+    "I'd walk 500 miles. But honestly the train is faster and has snacks.",
+    "Officially entering the \"talking to the moon because you're under the same one\" phase.",
+    "Gym update: I'm not lifting weights. I'm lifting the burden of missing you. Also weights.",
+    "Every rep is one rep closer to you. That's not how time works, but it feels like it.",
+    "Training goal for July: carry you AND your suitcase out of the airport. In one trip.",
+    "I skipped leg day once. Then I remembered I have to run to you at arrivals.",
+    "My personal trainer asked about my motivation. I showed him this website.",
+    "Don't worry, I'm not getting too big. You'll still fit in my arms. That's the whole plan.",
+    "Protein shake in one hand, phone in the other, waiting for your good morning text."
+  ];
+  var quipIndex = Math.floor(Math.random() * QUIPS.length);
+  function showQuip(next) {
+    var el = $("quip");
+    if (next) quipIndex = (quipIndex + 1) % QUIPS.length;
+    el.classList.add("fade");
+    setTimeout(function () { el.textContent = QUIPS[quipIndex]; el.classList.remove("fade"); }, next ? 300 : 0);
+  }
+  $("nextQuip").addEventListener("click", function () { showQuip(true); resetQuipTimer(); });
+  var quipTimer;
+  function resetQuipTimer() { clearInterval(quipTimer); quipTimer = setInterval(function () { showQuip(true); }, 12000); }
+
+  // ===== Silly statistics =====
+  function fmt(n) { return Math.round(n).toLocaleString("en-US"); }
+  function renderStats(ms, days) {
+    var weeks = days / 7;
+    var items = [
+      [days * 1, "\"good night\" texts, each one more dramatic than the last"],
+      [days * 6, "times I check this countdown (conservative estimate)"],
+      [ms / 1000 * 1.2, "heartbeats, and a suspicious number of them skip when you text"],
+      [weeks * 2, "pizzas eaten alone, which is tragic, but also more pizza for me"],
+      [days * 0.9, "nights sleeping diagonally across the bed, out of loneliness, obviously"],
+      [weeks * 3, "\"you're breaking up\" moments on video calls (the internet's fault, not ours)"],
+      [days / 3, "times I almost watch our show without you. Almost."],
+      [weeks * 4, "gym sessions, so the airport hug lifts you right off the ground"],
+      [days * 30, "push-ups, give or take a few hundred \"I'll do them tomorrow\""],
+      [weeks * 5, "protein shakes that taste like sad vanilla"],
+      [weeks * 3, "times I flex in the gym mirror and think \"she's gonna love this\""],
+      [weeks, "leg days I will absolutely not skip (I need them to run to you at arrivals)"]
+    ];
+    $("stats").innerHTML = items.map(function (it) {
+      return "<li><b>" + fmt(it[0]) + "</b><span>" + it[1] + "</span></li>";
+    }).join("");
+  }
+
+  // ===== The dots talk =====
+  var LINES_A = ["Are we there yet?", "I'm walking as fast as I can", "Save me the window seat", "Is that you? Oh, a lamp", "Practicing my hug pose", "Don't poke me, poke the calendar", "Doing lunges toward you", "One more set, then I'll call", "Six-pack loading… please wait"];
+  var LINES_B = ["Hurry up, slowpoke", "I brought snacks", "My arms are getting tired of waiting", "Stop poking, start walking", "I can see you from here (I can't)", "Bring chocolate or don't come", "Are those new muscles?!", "Don't come back stronger than me"];
+  function talk(btn, bubble, lines) {
+    var timer;
+    btn.addEventListener("click", function () {
+      bubble.textContent = lines[Math.floor(Math.random() * lines.length)];
+      bubble.classList.add("show");
+      clearTimeout(timer);
+      timer = setTimeout(function () { bubble.classList.remove("show"); }, 2200);
+    });
+  }
+  talk($("me"), $("bubbleA"), LINES_A);
+  talk($("you"), $("bubbleB"), LINES_B);
+  showQuip(false);
+  resetQuipTimer();
+
+  function setProgress(p) {
+    // The two dots begin at opposite ends and walk toward the heart in the middle
+    var half = p * 50;
+    $("me").style.left = half + "%";
+    $("you").style.left = (100 - half) + "%";
+    $("fillL").style.width = half + "%";
+    $("fillR").style.width = half + "%";
+  }
+
+  // Stars (only visible in night mode)
+  var sky = $("stars");
+  for (var i = 0; i < 70; i++) {
+    var s = document.createElement("span");
+    s.className = "star";
+    s.style.left = Math.random() * 100 + "%";
+    s.style.top = Math.random() * 70 + "%";
+    s.style.animationDelay = (Math.random() * 4).toFixed(2) + "s";
+    if (Math.random() > 0.85) { s.style.width = s.style.height = "3px"; }
+    sky.appendChild(s);
+  }
+
+  // Settings panel
+  var panel = $("settings"), toggle = $("toggle");
+  toggle.addEventListener("click", function () {
+    var open = panel.classList.toggle("open");
+    toggle.setAttribute("aria-expanded", open);
+    if (open) {
+      $("inDate").value = state.target;
+      $("inStart").value = state.start;
+      $("inA").value = state.nameA;
+      $("inB").value = state.nameB;
+      $("inNote").value = state.note;
+    }
+  });
+  $("save").addEventListener("click", function () {
+    if ($("inDate").value) state.target = $("inDate").value;
+    if ($("inStart").value) { state.start = $("inStart").value; store("left", state.start); }
+    state.nameA = $("inA").value.trim() || DEFAULTS.nameA;
+    state.nameB = $("inB").value.trim() || DEFAULTS.nameB;
+    state.note = $("inNote").value.trim() || DEFAULTS.note;
+    store("target", state.target); store("nameA", state.nameA);
+    store("nameB", state.nameB); store("note", state.note);
+    panel.classList.remove("open");
+    toggle.setAttribute("aria-expanded", "false");
+    toggle.textContent = "Saved — edit again";
+    render();
+  });
+
+  render();
+  setInterval(tick, 1000);
+})();
+</script>
+</body>
+</html>
