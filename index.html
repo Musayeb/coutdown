@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Until I see you again</title>
+<title>Avant de te revoir</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,500&family=Karla:wght@400;500&display=swap" rel="stylesheet">
@@ -243,39 +243,39 @@
 <div id="stars" aria-hidden="true"></div>
 
 <main id="main">
-  <p class="lead" id="lead">Until I hold you again</p>
-  <h1 id="title">July 2027</h1>
+  <p class="lead" id="lead">Avant de te serrer dans mes bras</p>
+  <h1 id="title">juillet 2027</h1>
 
   <div class="clock" role="timer" aria-live="off">
-    <div class="unit"><span class="num" id="months">0</span><span class="lbl" id="l-months">months</span></div>
+    <div class="unit"><span class="num" id="months">0</span><span class="lbl" id="l-months">mois</span></div>
     <span class="sep" aria-hidden="true">&amp;</span>
-    <div class="unit big"><span class="num" id="days">0</span><span class="lbl" id="l-days">days</span></div>
-    <div class="unit small"><span class="num" id="hours">00</span><span class="lbl">hours</span></div>
+    <div class="unit big"><span class="num" id="days">0</span><span class="lbl" id="l-days">jours</span></div>
+    <div class="unit small"><span class="num" id="hours">00</span><span class="lbl">heures</span></div>
     <div class="unit small"><span class="num" id="minutes">00</span><span class="lbl">minutes</span></div>
-    <div class="unit small"><span class="num" id="seconds">00</span><span class="lbl">seconds<span class="aside">yes, I'm counting</span></span></div>
+    <div class="unit small"><span class="num" id="seconds">00</span><span class="lbl">secondes<span class="aside">oui, je compte</span></span></div>
   </div>
 
-  <section class="distance" aria-label="How close we are">
+  <section class="distance" aria-label="Notre distance">
     <div class="track">
       <div class="fill l" id="fillL"></div>
       <div class="fill r" id="fillR"></div>
       <svg class="meet-heart" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.6 1.2 4.4 2.6.2.3.6.3.8 0 .8-1.4 2.3-2.6 4.4-2.6 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg>
-      <button class="who" id="me" aria-label="Poke Enzoka"><span class="bubble" id="bubbleA"></span><span class="dot"></span><span class="name" id="nameA">Enzoka</span></button>
-      <button class="who" id="you" aria-label="Poke Musako"><span class="bubble" id="bubbleB"></span><span class="dot"></span><span class="name" id="nameB">Musako</span></button>
+      <button class="who" id="me" aria-label="Toucher Enzoka"><span class="bubble" id="bubbleA"></span><span class="dot"></span><span class="name" id="nameA">Enzoka</span></button>
+      <button class="who" id="you" aria-label="Toucher Musako"><span class="bubble" id="bubbleB"></span><span class="dot"></span><span class="name" id="nameB">Musako</span></button>
     </div>
     <p class="progress-text" id="progress"></p>
-    <p class="hint">Tap the dots. They have opinions.</p>
+    <p class="hint">Touche les points. Ils ont des choses à dire.</p>
   </section>
 
   <p class="quip" id="quip" aria-live="polite"></p>
-  <button class="quip-btn" id="nextQuip">Another one</button>
+  <button class="quip-btn" id="nextQuip">Une autre</button>
 
-  <section class="stats" aria-label="Fun facts about the wait">
-    <h2>Before we meet, I will probably…</h2>
+  <section class="stats" aria-label="Statistiques de l'attente">
+    <h2>D'ici là, je vais probablement…</h2>
     <ul id="stats"></ul>
   </section>
 
-  <p class="note" id="note">Every second on this page is one less second between us.</p>
+  <p class="note" id="note">Chaque seconde sur cette page, c'est une seconde de moins entre nous.</p>
 </main>
 
 
@@ -287,7 +287,7 @@
     start: "2026-08-12T00:00",
     nameA: "Enzoka",
     nameB: "Musako",
-    note: "Every second on this page is one less second between us."
+    note: "Chaque seconde sur cette page, c'est une seconde de moins entre nous."
   };
 
   var state = {
@@ -299,7 +299,7 @@
   };
 
   var $ = function (id) { return document.getElementById(id); };
-  var monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  var monthNames = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
 
   function targetDate() { return new Date(state.target); }
 
@@ -331,14 +331,14 @@
 
     if (now >= t) {
       main.classList.add("arrived");
-      $("lead").textContent = "The wait is over";
-      $("title").textContent = "Today, " + state.nameA + " & " + state.nameB;
+      $("lead").textContent = "L'attente est finie";
+      $("title").textContent = "Aujourd'hui, " + state.nameA + " & " + state.nameB;
       setProgress(1);
-      $("progress").innerHTML = "<strong>Together.</strong> Why are you still looking at this website? Go hug!";
+      $("progress").innerHTML = "<strong>Ensemble.</strong> Pourquoi vous regardez encore ce site ? Allez vous faire un câlin !";
       return;
     }
     main.classList.remove("arrived");
-    $("lead").textContent = "Until I hold you again";
+    $("lead").textContent = "Avant de te serrer dans mes bras";
 
     var months = 0;
     while (addMonths(now, months + 1) <= t) months++;
@@ -353,8 +353,8 @@
     $("hours").textContent = pad(hours);
     $("minutes").textContent = pad(minutes);
     $("seconds").textContent = pad(seconds);
-    $("l-months").textContent = months === 1 ? "month" : "months";
-    $("l-days").textContent = days === 1 ? "day" : "days";
+    $("l-months").textContent = "mois";
+    $("l-days").textContent = days <= 1 ? "jour" : "jours";
 
     var start = new Date(state.start);
     var total = t - start;
@@ -363,58 +363,58 @@
 
     var totalDays = Math.ceil((t - now) / 86400000);
     var apart = Math.floor((now - start) / 86400000);
-    $("progress").innerHTML = "<strong>" + apart + "</strong> days survived since you left on " + start.getDate() + " " + monthNames[start.getMonth()] + ". <strong>" +
-      totalDays + "</strong> sleeps to go.<br>" + progressJoke(p) +
-      "<br>Gym glow-up loading: <strong>" + Math.round(p * 100) + "%</strong> " + glowJoke(p);
+    $("progress").innerHTML = "<strong>" + apart + "</strong> jours survécus depuis ton départ le " + start.getDate() + " " + monthNames[start.getMonth()] + ". Plus que <strong>" +
+      totalDays + "</strong> dodos.<br>" + progressJoke(p) +
+      "<br>Transformation muscu en cours : <strong>" + Math.round(p * 100) + " %</strong> " + glowJoke(p);
     if (now.getSeconds() === 0 || !statsDone) { renderStats(t - now, totalDays); statsDone = true; }
   }
   var statsDone = false;
 
   function progressJoke(p) {
-    var pct = "<strong>" + (p * 100).toFixed(1) + "%</strong>";
-    if (p < 0.005) return "Progress: basically zero. But emotionally? Huge.";
-    if (p < 0.10) return pct + " done. We've left the parking lot.";
-    if (p < 0.25) return pct + " done. Are we there yet? No.";
-    if (p < 0.50) return pct + " done. Still not there. Stop asking.";
-    if (p < 0.55) return pct + " done. Halfway! Somebody bring cake.";
-    if (p < 0.75) return pct + " done. Downhill from here (the good kind).";
-    if (p < 0.90) return pct + " done. Start practicing your airport hug.";
-    if (p < 0.98) return pct + " done. Pack your bag. Then unpack it. Then pack it again.";
-    return pct + " done. Brush your teeth. Seriously. Right now.";
+    var pct = "<strong>" + (p * 100).toFixed(1).replace(".", ",") + " %</strong>";
+    if (p < 0.005) return "Progression : quasi nulle. Mais émotionnellement ? Énorme.";
+    if (p < 0.10) return pct + " fait. On a quitté le parking.";
+    if (p < 0.25) return pct + " fait. On est bientôt arrivés ? Non.";
+    if (p < 0.50) return pct + " fait. Toujours pas. Arrête de demander.";
+    if (p < 0.55) return pct + " fait. La moitié ! Quelqu'un apporte un gâteau.";
+    if (p < 0.75) return pct + " fait. Ça descend à partir d'ici (dans le bon sens).";
+    if (p < 0.90) return pct + " fait. Commence à t'entraîner pour le câlin à l'aéroport.";
+    if (p < 0.98) return pct + " fait. Fais ta valise. Défais-la. Refais-la.";
+    return pct + " fait. Brosse-toi les dents. Sérieusement. Maintenant.";
   }
 
   function glowJoke(p) {
-    if (p < 0.2) return "(currently: strong in spirit)";
-    if (p < 0.4) return "(arms: noticeable if you squint)";
-    if (p < 0.6) return "(t-shirts getting a little tighter)";
-    if (p < 0.8) return "(strangers asking for gym tips)";
-    if (p < 0.98) return "(airport hug lift-off confirmed)";
-    return "(ready. so ready.)";
+    if (p < 0.2) return "(actuellement : fort dans ma tête)";
+    if (p < 0.4) return "(bras : visibles si on plisse les yeux)";
+    if (p < 0.6) return "(t-shirts un peu plus serrés)";
+    if (p < 0.8) return "(des inconnus me demandent des conseils muscu)";
+    if (p < 0.98) return "(décollage du câlin à l'aéroport confirmé)";
+    return "(prêt. tellement prêt.)";
   }
 
   // ===== Jokes =====
   var QUIPS = [
-    "Long distance relationship: when your phone becomes your favorite person-shaped object.",
-    "Current status: hugging my pillow and pretending it laughs at my jokes.",
-    "Scientists confirm: video calls do not transmit hugs. Yet. I've written a complaint.",
-    "I asked the calendar to go faster. It said no. Rude.",
-    "Our relationship is 90% \"can you hear me?\" and 10% \"you froze, say it again.\"",
-    "Distance means so little when someone means so much. It also means plane tickets. So many plane tickets.",
-    "I checked this page again. Nothing changed much. I'll check again in 4 minutes.",
-    "Warning: on arrival day, I may hug you for an amount of time airport security finds suspicious.",
-    "My time zone and your time zone are not friends. But we are.",
-    "Plan for the first day: hug. Food. Hug. Nap. Hug. More food.",
-    "Fun fact: refreshing this page does not make July come faster. I tested it. Many times.",
-    "Missing you is my cardio.",
-    "I'd walk 500 miles. But honestly the train is faster and has snacks.",
-    "Officially entering the \"talking to the moon because you're under the same one\" phase.",
-    "Gym update: I'm not lifting weights. I'm lifting the burden of missing you. Also weights.",
-    "Every rep is one rep closer to you. That's not how time works, but it feels like it.",
-    "Training goal for July: carry you AND your suitcase out of the airport. In one trip.",
-    "I skipped leg day once. Then I remembered I have to run to you at arrivals.",
-    "My personal trainer asked about my motivation. I showed him this website.",
-    "Don't worry, I'm not getting too big. You'll still fit in my arms. That's the whole plan.",
-    "Protein shake in one hand, phone in the other, waiting for your good morning text."
+    "Relation à distance : quand ton téléphone devient ton objet préféré en forme d'humain.",
+    "Statut actuel : je câline mon oreiller et je fais comme s'il riait à mes blagues.",
+    "Les scientifiques confirment : les appels vidéo ne transmettent pas les câlins. Pas encore. J'ai porté plainte.",
+    "J'ai demandé au calendrier d'aller plus vite. Il a dit non. Malpoli.",
+    "Notre couple, c'est 90 % de « tu m'entends ? » et 10 % de « t'as freezé, répète ».",
+    "La distance, ce n'est rien quand on s'aime. Enfin si, c'est des billets d'avion. Beaucoup de billets d'avion.",
+    "J'ai encore regardé cette page. Pas grand-chose n'a changé. Je regarde à nouveau dans 4 minutes.",
+    "Attention : le jour J, je risque de te serrer dans mes bras assez longtemps pour inquiéter la sécurité de l'aéroport.",
+    "Mon fuseau horaire et le tien ne sont pas amis. Mais nous, si.",
+    "Programme du premier jour : câlin. Manger. Câlin. Sieste. Câlin. Remanger.",
+    "Info : rafraîchir cette page ne fait pas venir juillet plus vite. J'ai testé. Plusieurs fois.",
+    "Tu me manques. C'est mon cardio.",
+    "Je traverserais l'océan à la nage pour toi. Mais franchement l'avion est plus rapide et il y a des snacks.",
+    "Officiellement dans ma phase « je parle à la lune parce qu'on est sous la même ».",
+    "Nouvelles de la salle : je ne soulève pas des poids, je soulève le poids de ton absence. Et des poids aussi.",
+    "Chaque répétition me rapproche de toi. Le temps ne marche pas comme ça, mais c'est l'impression que ça donne.",
+    "Objectif pour juillet : te porter TOI et ta valise jusqu'à la sortie de l'aéroport. En un seul voyage.",
+    "J'ai sauté le leg day une fois. Puis je me suis rappelé que je dois courir vers toi aux arrivées.",
+    "Mon coach m'a demandé ce qui me motive. Je lui ai montré ce site.",
+    "T'inquiète, je ne vais pas devenir trop baraqué. Tu tiendras toujours dans mes bras. C'est tout le plan.",
+    "Shaker de protéines dans une main, téléphone dans l'autre, j'attends ton message du matin."
   ];
   var quipIndex = Math.floor(Math.random() * QUIPS.length);
   function showQuip(next) {
@@ -428,22 +428,22 @@
   function resetQuipTimer() { clearInterval(quipTimer); quipTimer = setInterval(function () { showQuip(true); }, 12000); }
 
   // ===== Silly statistics =====
-  function fmt(n) { return Math.round(n).toLocaleString("en-US"); }
+  function fmt(n) { return Math.round(n).toLocaleString("fr-FR"); }
   function renderStats(ms, days) {
     var weeks = days / 7;
     var items = [
-      [days * 1, "\"good night\" texts, each one more dramatic than the last"],
-      [days * 6, "times I check this countdown (conservative estimate)"],
-      [ms / 1000 * 1.2, "heartbeats, and a suspicious number of them skip when you text"],
-      [weeks * 2, "pizzas eaten alone, which is tragic, but also more pizza for me"],
-      [days * 0.9, "nights sleeping diagonally across the bed, out of loneliness, obviously"],
-      [weeks * 3, "\"you're breaking up\" moments on video calls (the internet's fault, not ours)"],
-      [days / 3, "times I almost watch our show without you. Almost."],
-      [weeks * 4, "gym sessions, so the airport hug lifts you right off the ground"],
-      [days * 30, "push-ups, give or take a few hundred \"I'll do them tomorrow\""],
-      [weeks * 5, "protein shakes that taste like sad vanilla"],
-      [weeks * 3, "times I flex in the gym mirror and think \"she's gonna love this\""],
-      [weeks, "leg days I will absolutely not skip (I need them to run to you at arrivals)"]
+      [days * 1, "messages « bonne nuit », chacun plus dramatique que le précédent"],
+      [days * 6, "fois où je regarde ce compte à rebours (estimation prudente)"],
+      [ms / 1000 * 1.2, "battements de cœur, dont un nombre suspect qui s'emballent quand tu m'écris"],
+      [weeks * 2, "pizzas mangées seul, c'est tragique, mais ça fait plus de pizza pour moi"],
+      [days * 0.9, "nuits à dormir en diagonale dans le lit, par solitude, évidemment"],
+      [weeks * 3, "« tu coupes » pendant les appels vidéo (la faute à internet, pas à nous)"],
+      [days / 3, "fois où je regarde presque notre série sans toi. Presque."],
+      [weeks * 4, "séances de sport, pour que le câlin à l'aéroport te soulève du sol"],
+      [days * 30, "pompes, à quelques centaines de « je les ferai demain » près"],
+      [weeks * 5, "shakers de protéines au goût de vanille triste"],
+      [weeks * 3, "fois où je me regarde dans le miroir de la salle en pensant « elle va adorer »"],
+      [weeks, "leg days que je ne sauterai absolument pas (j'en ai besoin pour courir vers toi aux arrivées)"]
     ];
     $("stats").innerHTML = items.map(function (it) {
       return "<li><b>" + fmt(it[0]) + "</b><span>" + it[1] + "</span></li>";
@@ -451,8 +451,8 @@
   }
 
   // ===== The dots talk =====
-  var LINES_A = ["Are we there yet?", "I'm walking as fast as I can", "Save me the window seat", "Is that you? Oh, a lamp", "Practicing my hug pose", "Don't poke me, poke the calendar", "Doing lunges toward you", "One more set, then I'll call", "Six-pack loading… please wait"];
-  var LINES_B = ["Hurry up, slowpoke", "I brought snacks", "My arms are getting tired of waiting", "Stop poking, start walking", "I can see you from here (I can't)", "Bring chocolate or don't come", "Are those new muscles?!", "Don't come back stronger than me"];
+  var LINES_A = ["On est bientôt arrivés ?", "Je marche aussi vite que je peux", "Garde-moi la place côté hublot", "C'est toi ? Ah non, un lampadaire", "Je m'entraîne à la pose câlin", "Me touche pas, touche le calendrier", "Je fais des fentes vers toi", "Encore une série et je t'appelle", "Abdos en chargement… patiente"];
+  var LINES_B = ["Dépêche-toi, escargot", "J'ai apporté des snacks", "Mes bras se fatiguent d'attendre", "Arrête de cliquer, marche", "Je te vois d'ici (non)", "Ramène du chocolat ou ne viens pas", "C'est des nouveaux muscles ?!", "Reviens pas plus fort que moi"];
   function talk(btn, bubble, lines) {
     var timer;
     btn.addEventListener("click", function () {
