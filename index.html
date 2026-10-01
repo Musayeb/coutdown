@@ -77,7 +77,7 @@
   main {
     position: relative; z-index: 1;
     width: min(100%, 980px);
-    padding: clamp(2.5rem, 8vh, 6rem) 1.25rem 2rem;
+    padding: clamp(2.5rem, 8vh, 6rem) 1.25rem 4rem;
     text-align: center;
     flex: 1;
   }
@@ -205,36 +205,6 @@
     text-align: right; font-variant-numeric: tabular-nums; color: var(--glow);
   }
 
-  /* Settings */
-  footer { position: relative; z-index: 1; padding: 1rem 1.25rem 2rem; text-align: center; width: 100%; }
-  .edit-btn {
-    font: inherit; font-size: 0.95rem; color: var(--ink-soft);
-    background: none; border: 1px solid var(--line); border-radius: 999px;
-    padding: 0.5rem 1.1rem; cursor: pointer;
-  }
-  .edit-btn:hover { color: var(--ink); border-color: var(--ink-soft); }
-  button:focus-visible, input:focus-visible, textarea:focus-visible {
-    outline: 2px solid var(--glow); outline-offset: 3px;
-  }
-  .settings {
-    display: none; margin: 1.2rem auto 0; max-width: 420px; text-align: left;
-    background: var(--panel); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-    border: 1px solid var(--line); border-radius: 18px; padding: 1.3rem;
-  }
-  .settings.open { display: grid; gap: 0.9rem; }
-  .settings label { display: grid; gap: 0.3rem; font-size: 0.9rem; color: var(--ink-soft); }
-  .settings .row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
-  .settings input, .settings textarea {
-    font: inherit; font-size: 1rem; color: var(--ink);
-    background: transparent; border: 1px solid var(--line); border-radius: 10px;
-    padding: 0.55rem 0.7rem; width: 100%;
-  }
-  .settings textarea { resize: vertical; min-height: 4rem; }
-  .save {
-    font: inherit; font-weight: 500; border: 0; border-radius: 999px;
-    padding: 0.65rem 1.2rem; background: var(--ink); color: var(--sky-top); cursor: pointer;
-  }
-
   /* Arrival */
   .arrived h1 { margin-bottom: 1rem; }
   .arrived .clock { display: none; }
@@ -259,8 +229,6 @@
     .progress-text { font-size: 0.95rem; line-height: 1.6; }
     .stats li { grid-template-columns: 1fr; gap: 0.1rem; }
     .stats b { text-align: left; }
-    .settings .row { grid-template-columns: 1fr; }
-    .settings { padding: 1rem; }
   }
   @media (max-width: 340px) {
     .lbl .aside { white-space: normal; }
@@ -310,29 +278,10 @@
   <p class="note" id="note">Every second on this page is one less second between us.</p>
 </main>
 
-<footer>
-  <!-- <button class="edit-btn" id="toggle" aria-expanded="false" aria-controls="settings">Edit date and names</button> -->
-  <div class="settings" id="settings">
-    <label>The day we meet
-      <input type="datetime-local" id="inDate">
-    </label>
-    <label>The day she left
-      <input type="datetime-local" id="inStart">
-    </label>
-    <div class="row">
-      <label>Your name <input type="text" id="inA" maxlength="24"></label>
-      <label>Her name <input type="text" id="inB" maxlength="24"></label>
-    </div>
-    <label>A little note
-      <textarea id="inNote" maxlength="160"></textarea>
-    </label>
-    <button class="save" id="save">Save</button>
-  </div>
-</footer>
 
 <script>
 (function () {
-  // ===== Default settings — change the date here if you like =====
+  // ===== Fixed settings =====
   var DEFAULTS = {
     target: "2027-07-01T00:00",
     start: "2026-08-12T00:00",
@@ -341,23 +290,12 @@
     note: "Every second on this page is one less second between us."
   };
 
-  function load(key, fallback) {
-    try { var v = localStorage.getItem("cd_" + key); return v ? v : fallback; }
-    catch (e) { return fallback; }
-  }
-  function store(key, val) {
-    try { localStorage.setItem("cd_" + key, val); } catch (e) {}
-  }
-
-  // Replace the old placeholder names if they were ever saved
-  function fixName(v, old, fallback) { return v === old ? fallback : v; }
-
   var state = {
-    target: load("target", DEFAULTS.target),
-    nameA: fixName(load("nameA", DEFAULTS.nameA), "Me", DEFAULTS.nameA),
-    nameB: fixName(load("nameB", DEFAULTS.nameB), "You", DEFAULTS.nameB),
-    note: load("note", DEFAULTS.note),
-    start: load("left", DEFAULTS.start)
+    target: DEFAULTS.target,
+    nameA: DEFAULTS.nameA,
+    nameB: DEFAULTS.nameB,
+    note: DEFAULTS.note,
+    start: DEFAULTS.start
   };
 
   var $ = function (id) { return document.getElementById(id); };
@@ -550,32 +488,6 @@
     sky.appendChild(s);
   }
 
-  // Settings panel
-  var panel = $("settings"), toggle = $("toggle");
-  toggle.addEventListener("click", function () {
-    var open = panel.classList.toggle("open");
-    toggle.setAttribute("aria-expanded", open);
-    if (open) {
-      $("inDate").value = state.target;
-      $("inStart").value = state.start;
-      $("inA").value = state.nameA;
-      $("inB").value = state.nameB;
-      $("inNote").value = state.note;
-    }
-  });
-  $("save").addEventListener("click", function () {
-    if ($("inDate").value) state.target = $("inDate").value;
-    if ($("inStart").value) { state.start = $("inStart").value; store("left", state.start); }
-    state.nameA = $("inA").value.trim() || DEFAULTS.nameA;
-    state.nameB = $("inB").value.trim() || DEFAULTS.nameB;
-    state.note = $("inNote").value.trim() || DEFAULTS.note;
-    store("target", state.target); store("nameA", state.nameA);
-    store("nameB", state.nameB); store("note", state.note);
-    panel.classList.remove("open");
-    toggle.setAttribute("aria-expanded", "false");
-    toggle.textContent = "Saved — edit again";
-    render();
-  });
 
   render();
   setInterval(tick, 1000);
